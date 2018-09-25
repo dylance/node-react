@@ -5,6 +5,16 @@ const keys = require("../config/keys");
 
 const User = mongoose.model("users");
 
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+passport.deserializeUser((id, done) => {
+  User.findById(id).then(user => {
+    done(null, user);
+  });
+});
+
 passport.use(
   new GoogleStrategy(
     {
@@ -15,8 +25,13 @@ passport.use(
     (accessToken, refreshToken, profile, done) => {
       User.findOne({ googleID: profile.id }).then(existingUser => {
         if (existingUser) {
+          console.log("before");
+          done(null, existingUser); // null indicates no error, msg to googAuth
+          console.log("after");
         } else {
-          new User({ googleID: profile.id }).save();
+          new User({ googleID: profile.id }); // creates mongoose model instance
+          //  .save() // saves to mongodb
+          //.then(user => done(null, user));
         }
       });
     }
