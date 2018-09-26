@@ -30,9 +30,9 @@ passport.use(
           done(null, existingUser); // null indicates no error, msg to googAuth
           console.log("after");
         } else {
-          new User({ googleID: profile.id }); // creates mongoose model instance
-          //  .save() // saves to mongodb
-          //.then(user => done(null, user));
+          new User({ googleID: profile.id }) // creates mongoose model instance
+            .save() // saves to mongodb
+            .then(user => done(null, user));
         }
       });
     }
