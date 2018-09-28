@@ -23,18 +23,14 @@ passport.use(
       callbackURL: "/auth/google/callback",
       proxy: true
     },
-    (accessToken, refreshToken, profile, done) => {
-      User.findOne({ googleID: profile.id }).then(existingUser => {
-        if (existingUser) {
-          console.log("before");
-          done(null, existingUser); // null indicates no error, msg to googAuth
-          console.log("after");
-        } else {
-          new User({ googleID: profile.id }) // creates mongoose model instance
-            .save() // saves to mongodb
-            .then(user => done(null, user));
-        }
-      });
+    async (accessToken, refreshToken, profile, done) => {
+      const existingUser = await User.findOne({ googleID: profile.id });
+
+      if (existingUser) {
+        return done(null, existingUser); // null indicates no error, msg to googAuth
+      }
+      const user = await new User({ googleID: profile.id }).save(); // creates mongoose model instance // saves to mongodb
+      done(null, user);
     }
   )
 );
