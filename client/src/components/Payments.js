@@ -5,10 +5,16 @@ class Payments extends Component {
   render(){
     return (
       <StripeCheckout
+        name="Email App"
+        description="Pay for email credits"
         amount={500}
         token={token => console.log(token)}
         stripeKey={process.env.REACT_APP_STRIPE_PUB_KEY}
-      />
+      >
+        <button className="btn">
+          Add Credits
+        </button>
+      </StripeCheckout>
     );
   }
 }
