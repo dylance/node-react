@@ -21,3 +21,11 @@ export const handleToken = token =>  async dispatch => {
   dispatch({type: FETCH_USER, payload: res.data});
 
 }
+
+//redux always expects a type to be submitted from an action creator
+export const submitSurvey = (values, history) => async dispatch => {
+  const res = await axios.post('/api/surveys', values);
+
+  history.push('/surveys');
+  dispatch({ type: FETCH_USER, payload: res.data});
+}
